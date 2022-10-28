@@ -17,4 +17,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/api/authorization', 'ApiController@authorization')->name('authorization');
+//Route::post('/api/auth', 'UserController@authorization')->name('authorization');
