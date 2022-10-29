@@ -11,12 +11,11 @@ class UserController extends Controller
 {
     public function authorization(Request $request)
     {
-
         $bodyContent = $request->getContent();
-        json_decode($bodyContent, true);
-        dd($bodyContent);
-//        $email = $bodyContent["email"]; // Dont work
-        return $bodyContent;
+        $bodyContent = json_decode($bodyContent, true);
+        $email = $bodyContent['email'];
+        $user = User::where('email', $email)->get();
+        return $user;
     }
     public function registration(Request $request)
     {
