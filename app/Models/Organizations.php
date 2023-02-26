@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Organizations extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'fk_regions',
+    ];
 }

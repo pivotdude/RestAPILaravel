@@ -2,42 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Organizations;
+use http\Env\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class OrganizationsController extends Controller
 {
-    public function get_all_organizations (Request $request) {
-        $regions = Region::all();
-        return response()->json(['data' => ['regions' => $regions], 'status' => 'ok'], 200);
+    public function get_all_organizations (Request $request, $region_id): JsonResponse {
+        $organizations = Organizations::where('fk_regions', $region_id)->get();
+
+        if (is_null($organizations)) {
+            return response()->json(['data' => ['error' => 'Организация не найден'], 'status' => 'error'], 404);
+        }
+
+        return response()->json(['data' => ['regions' => $organizations], 'status' => 'ok'], 200);
     }
 
-    public function add_region(Request $request) {
+    public function add_organization(Request $request, $region_id): JsonResponse {
         $name = $request->input('name');
-        $region = Region::firstOrCreate(['name' => $name]);
+        $region = Organizations::create(['fk_regions' => $region_id, 'name' => $name]);
+
+        if (is_null($region)) {
+            return response()->json(['data' => ['error' => 'Организация не найдена'], 'status' => 'error'], 404);
+        }
+
         return response()->json(['data' => ['region' => $region], 'status' => 'ok'], 200);
     }
 
-    public function edit_organization(Request $request, $id) {
-        $new_name = $request->input('name');
-        $region = Region::where('id', $id)->update(['name' => $new_name]);
-
+    public function edit_organization(Request $request, $region_id, $id): JsonResponse {
+        $name = $request->input('name');
+        $region = Organizations::where([['fk_regions', $region_id], ['id', $id]])->update(['name' => $name]);
         if ($region == 0) {
-            return response()->json(['data' => ['error' => 'Региона не существует'], 'status' => 'error'], 404);
+            return response()->json(['data' => ['error' => 'Организации не существует'], 'status' => 'error'], 404);
         }
 
-        return response()->json(['data' => ['region' => Region::find($id)], 'status' => 'ok'], 200);
+        return response()->json(['data' => ['region' => Organizations::where([['fk_regions', $region_id], ['id', $id]])->get()], 'status' => 'ok'], 200);
     }
 
-    public function delete_organization (Request $request, $id) {
+    public function delete_organization (Request $request, $region_id, $id): JsonResponse {
 
-        if (!Region::find($id)) {
-            return response()->json(['data' => ['error' => 'Регион не найден'], 'status' => 'error'], 404);
+        $organization = Organizations::where([['fk_regions', $region_id], ['id', $id]]);
+
+        if (is_null($organization)) {
+            return response()->json(['data' => ['error' => 'Организация не найдена'], 'status' => 'error'], 404);
         }
 
-        if (Region::find($id)->delete()) {
+        if ($organization->delete()) {
             return response()->json(['status' => 'ok'], 200);
         } else {
-            return response()->json(['data' => ['error' => 'Регион содержит организцации'], 'status' => 'ok'], 400);
+            return response()->json(['data' => ['error' => 'Регион содержит консультантов'], 'status' => 'ok'], 400);
         }
     }
 }
