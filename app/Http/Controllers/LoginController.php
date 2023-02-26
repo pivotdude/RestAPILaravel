@@ -19,7 +19,8 @@ class LoginController extends Controller
     // User Register
     public function register(Request $request) {
         $validator  =   Validator::make($request->all(), [
-            "name"  =>  "required",
+            "firstname"  =>  "required",
+            "lastname"  =>  "required",
             "email"  =>  "required|email",
             "password"  =>  "required"
         ]);

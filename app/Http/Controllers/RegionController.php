@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\Region;
 
@@ -36,9 +37,10 @@ class RegionController extends Controller
             return response()->json(['data' => ['error' => 'Регион не найден'], 'status' => 'error'], 404);
         }
 
-        if (Region::find($id)->delete()) {
+        try {
+            Region::find($id)->delete();
             return response()->json(['status' => 'ok'], 200);
-        } else {
+        } catch (QueryException $e) {
             return response()->json(['data' => ['error' => 'Регион содержит организцации'], 'status' => 'ok'], 400);
         }
 

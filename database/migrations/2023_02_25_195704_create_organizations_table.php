@@ -19,7 +19,7 @@ class CreateOrganizationsTable extends Migration
             $table->string('name');
             $table->timestamps();
 
-            $table->foreign('fk_regions')->references('id')->on('users');
+            $table->foreign('fk_regions')->references('id')->on('regions');
         });
     }
 

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\LoginController;
 use \App\Http\Controllers\RegionController;
 use \App\Http\Controllers\OrganizationsController;
+use \App\Http\Controllers\ConsultantsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,3 +41,10 @@ Route::post('regions/{region}/organizations', [OrganizationsController::class, '
 // Если ниже в route стоит put,то request пустой :(
 Route::post('regions/{region}/organizations/{organization}', [OrganizationsController::class, 'edit_organization']); // Изменение региона
 Route::delete('regions/{region}/organizations/{organization}', [OrganizationsController::class, 'delete_organization']); // Удаление региона
+
+
+Route::get('regions/{region}/organizations/{organization}/consultants', [ConsultantsController::class, 'get_all_consultants']); // Все организации
+Route::post('regions/{region}/organizations/{organization}/consultants', [ConsultantsController::class, 'add_consultants']); // Добавление региона
+// Если ниже в route стоит put,то request пустой :(
+Route::post('regions/{region}/organizations/{organization}/consultants/{consultant}', [ConsultantsController::class, 'edit_consultants']); // Изменение региона
+Route::delete('regions/{region}/organizations/{organization}/consultants/{consultant}', [ConsultantsController::class, 'delete_consultants']); // Удаление региона
