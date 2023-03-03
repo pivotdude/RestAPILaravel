@@ -32,7 +32,9 @@ class LoginController extends Controller
         $inputs = $request->all();
         $inputs["password"] = Hash::make($request->password);
 
-        if (User::where('email', $inputs['email'])) {
+        $usercon = User::where('email', $inputs['email'])->get();
+
+        if (!$usercon) {
             return response()->json(["status" => "failed", "message" => "Email is already in use!"]);
         }
 
@@ -51,7 +53,7 @@ class LoginController extends Controller
 
         $validator = Validator::make($request->all(), [
             "email" =>  "required|email",
-            "password" =>  "required",
+            "password" =>  "required|min:8",
         ]);
 
         if($validator->fails()) {
@@ -78,9 +80,9 @@ class LoginController extends Controller
 
     // User Detail
     public function user(Request $request) {
-        echo $request->user();
+        $user = $request->user();
 
-        if(!is_null($user)) {
+        if(!is_null($request->user())) {
             return response()->json(["status" => "success", "data" => $user]);
         }
 

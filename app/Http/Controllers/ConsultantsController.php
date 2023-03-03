@@ -113,7 +113,8 @@ class ConsultantsController extends Controller
         $user = User::find($consultant['fk_user']);
 
         try {
-            $consultant->delete() && $user->delete();
+            $consultant->delete();
+            $user->delete();
             return response()->json(['status' => 'ok'], 200);
         } catch (QueryException $e) {
             return response()->json(['data' => ['error' => 'Организация содержит консультантов'], 'status' => 'error'], 400);

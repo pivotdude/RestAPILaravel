@@ -33,6 +33,7 @@ class OrganizationsController extends Controller
     }
 
     public function edit_organization(Request $request, $region_id, $organization_id): JsonResponse {
+        echo $request;
         $name = $request->input('name');
 
         if (!(Region::find($region_id))) {

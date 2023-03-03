@@ -21,14 +21,14 @@ class RegionController extends Controller
     }
 
     public function edit_region(Request $request, $id) {
-        $new_name = $request->input('name');
-        $region = Region::where('id', $id)->update(['name' => $new_name]);
+        $new_name = $request->all();
+//        $region = Region::where('id', $id)->update(['name' => $new_name]);
 
-        if ($region == 0) {
-            return response()->json(['data' => ['error' => 'Региона не существует'], 'status' => 'error'], 404);
-        }
-
-        return response()->json(['data' => ['region' => Region::find($id)], 'status' => 'ok'], 200);
+//        if ($region == 0) {
+//            return response()->json(['data' => ['error' => 'Региона не существует'], 'status' => 'error'], 404);
+//        }
+//Region::find($id)
+        return response()->json(['data' => ['region' => $new_name], 'status' => 'ok'], 200);
     }
 
     public function delete_region (Request $request, $id) {
